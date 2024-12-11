@@ -41,7 +41,7 @@ int main(){
         }
         while(game[((f(head) + dt + W * H) % (W * H))].state == '+'){
             int x = rand() % (W * H);
-            if(game[x].state == '*') continue;
+            if(game[x].state == '*'|| game[x].state=='+') continue;
             else game[x].state = '+'; break;
         }
         game[tmp].state = '.';
