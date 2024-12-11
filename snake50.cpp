@@ -2,9 +2,9 @@
 #include <chrono>
 #include <thread>
 #include <conio.h>
-const int W = 16, H = 16;
-char move = 'w',x = 'w';
-int head = W/2+(H/2)*W;
+#include <windows.h>
+const int W = 20, H = 20;
+int move = 'w',x = 'w',head = W / 2 + (H / 2) * W;
 struct tile{
     int ptr = -1;
     char state = '.';
@@ -13,7 +13,7 @@ int main(){
     game[head] = {-1,'*'};
     game[2] = {-1,'+'};
     while(true){
-        printf("%c[%d;%df", 0x1B, 1, 1);//set cursor to 1,1
+        SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), {0, 0});
         for(int i = 0; i < W+2; i++)printf("-");
         printf("\n");
         for(int i = 0; i < H; i++){
@@ -24,7 +24,7 @@ int main(){
             printf("|\n");
         }
         for(int i = 0; i < W+2; i++)printf("-");
-        std::this_thread::sleep_for(std::chrono::milliseconds(750));
+        std::this_thread::sleep_for(std::chrono::milliseconds(250));
         while(_kbhit())x = _getch();
         int tmp1 = 'w' * (x == 'w' && move != 's') + 'a' * (x == 'a' && move != 'd') + 's' * (x == 's' && move != 'w') + 'd' * (x == 'd' && move != 'a');
         move = tmp1==0?move:tmp1;
@@ -41,7 +41,8 @@ int main(){
         }
         while(game[((f(head) + dt + W * H) % (W * H))].state == '+'){
             int x = rand() % (W * H);
-            if(game[x].state == '*') continue; else game[x].state = '+'; break;
+            if(game[x].state == '*') continue;
+            else game[x].state = '+'; break;
         }
         game[tmp].state = '.';
         game[head = ((f(head) + dt + W * H) % (W * H))] = {head,'*'};
